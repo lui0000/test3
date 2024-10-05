@@ -2,8 +2,6 @@ package com.eliza.testing.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-
 @Entity
 @Table(name = "city")
 public class City {

@@ -17,8 +17,9 @@ public class CityController {
     private CityService cityService;
 
     private String currentPlayer = "Player 1";
-    private int player1Time = 30;
-    private int player2Time = 30;
+    private final int player1Time = 30;
+    private final int player2Time = 30;
+    private String lastCity = null;
 
     @GetMapping()
     public String index(Model model) {
@@ -35,14 +36,17 @@ public class CityController {
         boolean isValid = cityService.isCityExists(cityName);
 
         if (isValid) {
-            // Передаем ход другому игроку
-            currentPlayer = currentPlayer.equals("Player 1") ? "Player 2" : "Player 1";
-            model.addAttribute("message", "The city is accepted. Move: " + currentPlayer);
+            if (lastCity != null && !cityService.isCorrect(lastCity, cityName)) {
+                model.addAttribute("message", "The first letter of the city must match the last letter of the previous city. Try again.");
+            } else {
+                lastCity = cityName;
+                currentPlayer = currentPlayer.equals("Player 1") ? "Player 2" : "Player 1";
+                model.addAttribute("message", "The city is accepted. Move: " + currentPlayer);
+            }
         } else {
             model.addAttribute("message", "City not found. Try again.");
         }
 
-        // Обновляем таймеры
         model.addAttribute("player1Time", player1Time);
         model.addAttribute("player2Time", player2Time);
 

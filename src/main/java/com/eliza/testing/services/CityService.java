@@ -21,8 +21,11 @@ public class CityService {
         return cityRepository.existsByCityName(name);
     }
 
-    public void saveCity(City city) {
-        cityRepository.save(city);
-    }
 
+    public boolean isCorrect(String previousCity, String currentCity) {
+        char lastLetterPrevious = Character.toLowerCase(previousCity.charAt(previousCity.length() - 1));
+        char firstLetterCurrent = Character.toLowerCase(currentCity.charAt(0));
+
+        return lastLetterPrevious == firstLetterCurrent;
+    }
 }
