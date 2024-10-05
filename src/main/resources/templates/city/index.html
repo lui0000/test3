@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Cities Game</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            background-color: #1a1719;
+        }
+
+        h1 {
+            color: #bdc3c7;
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2b313d;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1.2em;
+            color: #bdc3c7;
+        }
+
+        input[type="text"] {
+            width: 250px;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #415a8c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #273757;
+        }
+
+        /* Стили для сообщений */
+        .message {
+            margin-top: 20px;
+            color: #de5071;
+            font-weight: bold;
+        }
+
+        /* Таймер */
+        #timer {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #de5071;
+        }
+
+        /*        #timer h2 {*/
+        /*            margin-bottom: 10px;*/
+        /*        }*/
+
+        /* Дополнительные стили для таймера */
+        .timer-display {
+            font-size: 2em;
+            font-weight: bold;
+            padding: 10px;
+            color: #de5071;
+            border: 2px solid #c41b43;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Cities Game</h1>
+
+<!-- Сообщение об ошибке или успехе -->
+<div class="message" th:if="${message}" th:text="${message}"></div>
+
+<form action="/submitCity" method="post" th:object="${city}">
+    <label for="cityName">Enter city:</label><br>
+    <input type="text" id="cityName" th:field="*{cityName}" required>
+    <div class="message" th:if="${#fields.hasErrors('cityName')}" th:errors="*{cityName}">Title Error</div><br>
+    <button type="submit">Submit</button>
+</form>
+
+<div id="timer">
+<!--    <h2>Timer</h2>-->
+    <div class="timer-display">
+        <span id="timer1" th:text="${player1Time}">30</span> seconds
+    </div>
+    <!-- <div>Player 2: <span id="timer2" th:text="${player2Time}">30</span> seconds</div> -->
+</div>
+
+<script>
+    let player1Time = 30; // Таймер для игрока 1
+    let player2Time = 30; // Таймер для игрока 2
+    let currentPlayer = 1; // 1 - игрок 1, 2 - игрок 2
+
+    function updateTimers() {
+        document.getElementById('timer1').textContent = player1Time;
+        document.getElementById('timer2').textContent = player2Time;
+    }
+
+    function startTimer() {
+        const timerInterval = setInterval(() => {
+            if (currentPlayer === 1) {
+                player1Time--;
+                if (player1Time <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up!");
+                    currentPlayer = 2; // Передаем ход игроку 2
+                    player2Time = 30; // Сбрасываем таймер для игрока 2
+                    updateTimers(); // Обновляем отображение таймеров
+                    startTimer(); // Запускаем таймер для нового текущего игрока
+                }
+            } else {
+                player2Time--;
+                if (player2Time <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up!");
+                    currentPlayer = 1;
+                    player1Time = 30;
+                    updateTimers();
+                    startTimer();
+                }
+            }
+
+            updateTimers();
+        }, 1000);
+    }
+
+    window.onload = startTimer;
+</script>
+</body>
+</html>
+
