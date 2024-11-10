@@ -36,8 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### Docker ###
+docker-compose.yml
+
 ### Database configuration file ###
 src/main/resources/application.properties
 
-### Docker ###
-docker-compose.yml
