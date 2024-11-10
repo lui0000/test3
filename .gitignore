@@ -38,3 +38,6 @@ out/
 
 ### Database configuration file ###
 src/main/resources/application.properties
+
+### Docker ###
+docker-compose.yml
