@@ -10,7 +10,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Название книги не должно быть пустым")
+    @NotEmpty(message = "Название города не должно быть пустым")
     @Column(name = "city_name", unique = true)
     private String cityName;
 
